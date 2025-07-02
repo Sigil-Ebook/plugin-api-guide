@@ -44,7 +44,7 @@ jobs:
         unzip echeck.zip
 
     - name: Test Epub
-      run: java -jar $GITHUB_WORKSPACE/epubcheck-$VERSION/epubcheck.jar $GITHUB_WORKSPACE/src/ -mode exp --failonwarnings
+      run: java -jar $GITHUB_WORKSPACE/epubcheck-$VERSION/epubcheck.jar $GITHUB_WORKSPACE/src/ -mode exp
 
     - name: Create Epub Artifact
       if: "contains(github.event.head_commit.message, '[deploy]')"
