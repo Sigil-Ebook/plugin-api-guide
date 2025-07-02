@@ -6,7 +6,7 @@ on:
 
   workflow_run:
     # Only run after test & build action completes
-    workflows: ["Test and Build Sigil Guide"]
+    workflows: ["Test and Build Plugin API Guide"]
     types:
       - completed
 
