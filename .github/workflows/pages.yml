@@ -23,7 +23,7 @@ jobs:
   # Single deploy job since we're just deploying
   deploy:
     # And we want to be able to test pull requests without publishing them.
-    if: github.event_name != 'pull_request' }}
+    if: {{ github.event_name != 'pull_request' }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
