@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<package version="2.0" unique-identifier="BookId" xmlns="http://www.idpf.org/2007/opf">
-  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
-    <dc:identifier id="BookId" opf:scheme="UUID">urn:uuid:de4ef1ad-aef5-4d2e-b59b-ee93ed35410e</dc:identifier>
-    <dc:title>Sigil Plugin Framework</dc:title>
-    <dc:creator opf:file-as="Hendricks, Kevin B." opf:role="aut">Kevin B. Hendricks</dc:creator>
+<package version="3.0" unique-identifier="BookId" prefix="rendition: http://www.idpf.org/vocab/rendition/#" xml:lang="en" xmlns="http://www.idpf.org/2007/opf">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:dcterms="http://purl.org/dc/terms/">
+    <dc:identifier id="BookId">urn:uuid:de4ef1ad-aef5-4d2e-b59b-ee93ed35410e</dc:identifier>
+    <dc:title id="title1">Sigil Plugin Framework</dc:title>
+    <meta refines="#title1" property="title-type">main</meta>
+    <dc:creator id="create1">Kevin B. Hendricks</dc:creator>
+    <meta refines="#create1" property="role" scheme="marc:relators">aut</meta>
+    <meta refines="#create1" property="file-as">Hendricks, Kevin B.</meta>
     <dc:language>en</dc:language>
-    <dc:date opf:event="modification">2025-05-30</dc:date>
-    <meta content="2.5.0" name="Sigil version"/>
+    <meta content="2.5.2" name="Sigil version"/>
+    <meta property="dcterms:modified">2025-07-02T15:04:24Z</meta>
   </metadata>
   <manifest>
     <item id="coverpage" href="Text/cover.html" media-type="application/xhtml+xml"/>
@@ -26,6 +29,7 @@
     <item id="epub_utils_py.html" href="Text/epub_utils_py.html" media-type="application/xhtml+xml"/>
     <item id="preferences_py.html" href="Text/preferences_py.html" media-type="application/xhtml+xml"/>
     <item id="Manage_Plugins.png" href="Images/Manage_Plugins.png" media-type="image/png"/>
+    <item id="navid" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/>
   </manifest>
   <spine toc="ncx">
     <itemref idref="coverpage"/>
@@ -41,5 +45,9 @@
     <itemref idref="pluginhunspell_py.html"/>
     <itemref idref="sigil_gumbo_bs4_adapter_py.html"/>
     <itemref idref="epub_utils_py.html"/>
+    <itemref idref="navid"/>
   </spine>
+  <guide>
+    <reference type="text" title="Text" href="Text/sigil_plugin_anatomy.html"/>
+  </guide>
 </package>

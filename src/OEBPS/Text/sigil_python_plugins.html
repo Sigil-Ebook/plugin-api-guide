@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
 <head>
   <title>Edit Book Container</title>
 </head>
@@ -14,7 +13,7 @@
 
   <p>The primary idea behind the BookContainer interface is that it will parse the OPF file for you behind the scenes and make available files via their manifest ids. As users add and remove files, change metadata, etc, the underlying OPF file is automatically updated to reflect those changes. If your code requires you to parse the OPF file yourself, the currently updated OPF file contents can be generated and returned as a data string.</p>
 
-<p>To protect Sigil from plugin crashes and failures, Sigil's plugin interface was designed to records all changes (copy on write) made by the plugin and only makes them available upon plugin completion.  Behind the scenes each plugin is actually run in its own process and returns an xml file indicating the type and location of changed files.</p> 
+<p>To protect Sigil from plugin crashes and failures, Sigil's plugin interface was designed to records all changes (copy on write) made by the plugin and only makes them available upon plugin completion.  Behind the scenes each plugin is actually run in its own process and returns an xml file indicating the type and location of changed files.</p>
 
   <p>In addition to the interface provided via the book container class, the following site packages are also available to Python 3.4 or later interpreter engines for plugin developers to take advantage of:</p>
 
@@ -618,7 +617,7 @@ class BookContainer(object):
 
   <p></p>
 
-<h2>Routines for supporting all epub structures (Sigil 1.0 and later)</h2>
+<h2 id="sigil_toc_id_16">Routines for supporting all epub structures (Sigil 1.0 and later)</h2>
   <p></p>
 
 <p>A book path (aka "bookpath" aka "book_href" aka "bookhref") is a unique relative path from the ebook root to a specific file.</p>
@@ -736,7 +735,7 @@ class BookContainer(object):
 
 <p>&#160;</p>
 
-<h2>Routines new in Sigil 1.9</h2>
+<h2 id="sigil_toc_id_17">Routines new in Sigil 1.9</h2>
   <p></p>
 
 <p>Sigil 1.8 saw the introduction of the Sigil Automate Lists feature. To make this feature useful, as of Sigil 1.9.0, we have allowed Automate Lists to pass a single line string parameter (value) to a plugin via the new Automate command SetPluginParameter [one line parameter string].</p>
