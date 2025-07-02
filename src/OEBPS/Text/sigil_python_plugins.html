@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Edit Book Container</title>
+</head>
+
+<body>
+  <h1>The Plugin Interface: See file: bookcontainer.py</h1>
+
+  <p>Each plugin is passed an instance of a container class that maps to the type of plugin.  For "edit" plugins this container class is called <b>BookContainer</b> and is represented by the (bk) in the single parameter to their run() function. The BookContainer class effectively implements the Python 3.4 edit plugin interface for Sigil. All of the plugin interface code has been written to run on python 3.4 or later systems. For more information, see <a href="../Text/sigil_plugin_anatomy.html">the Anatomy of a Plugin</a> . The BookContainer class contains a number of interface routines, utilities, and iterators to allow you safe access to the ePub ebook internals currently being edited by Sigil (in the current active window).</p>
+
+  <p>The primary idea behind the BookContainer interface is that it will parse the OPF file for you behind the scenes and make available files via their manifest ids. As users add and remove files, change metadata, etc, the underlying OPF file is automatically updated to reflect those changes. If your code requires you to parse the OPF file yourself, the currently updated OPF file contents can be generated and returned as a data string.</p>
+
+<p>To protect Sigil from plugin crashes and failures, Sigil's plugin interface was designed to records all changes (copy on write) made by the plugin and only makes them available upon plugin completion.  Behind the scenes each plugin is actually run in its own process and returns an xml file indicating the type and location of changed files.</p> 
+
+  <p>In addition to the interface provided via the book container class, the following site packages are also available to Python 3.4 or later interpreter engines for plugin developers to take advantage of:</p>
+
+  <ol>
+    <li><p>Sigil Customized Version of BeautifulSoup4 called sigil_bs4</p></li>
+
+    <li><p>Sigil custom interface to Google's Gumbo (html5) Parser</p></li>
+
+    <li><p>Pillow (PIL) for Image Manipulation</p></li>
+
+    <li><p>regex enhanced regular expressions</p></li>
+
+    <li><p>html5lib a pure python html5 parser</p></li>
+
+    <li><p>lxml an elementree interface to libxml2 for XML and html processing</p></li>
+
+    <li><p>css-parser a collection of routines to help process css files</p></li>
+
+    <li><p>cssselect routine to select elements in lxml tree using css selection rules</p></li>
+
+    <li><p>chardet routines to detect encoding used in strings</p></li>
+
+    <li><p>PySide6 Qt widget module to allow your plugin to create a Qt graphical user interface that better matches Sigil's own</p></li>
+
+    <li><p> An older tk/tcl Tkinter widget kit that is now DEPRECATED for creating a graphical user interface for your plugin. All new plugin development should use the PySide6 widget toolkit when a gui is needed.</p></li>
+
+  </ol>
+
+  <p>&#160;</p>
+
+  <p>If you examine the bookcontainer.py file you will see the following definitions:</p>
+
+  <pre><code> 
+import sys 
+import os 
+from quickparser import QuickXHTMLParser 
+
+class ContainerException(Exception): 
+	pass 
+
+class BookContainer(object): 
+    self.qp=QuickXHTMLParser()
+    self.hspell = HunspellChecker(wrapper.get_hunspell_path())
+    self.dictionary_dirs = wrapper.get_dictionary_dirs()
+    self._prefs_store = JSONPrefs(wrapper.plugin_dir, wrapper.plugin_name)
+ 
+  </code></pre>
+
+  <p>The instance of the BookContainer class passed in to your run() function will be referred to as <em>bk</em> in the description of the interface that follows.</p>
+
+  <p>The actual up-to-date container source code can be found in the <a href="https://github.com/Sigil-Ebook/Sigil/tree/master/src/Resource_Files/plugin_launchers/python">Sigil github tree in src/Sigil/Resource_Files/plugin_launchers/python.</a> </p>
+
+  <p>For "edit" plugins see <a href="../Text/bookcontainer_py.html">bookcontainer.py</a> , for input plugins see <a href="../Text/inputcontainer_py.html">inputcontainer.py</a>, for output plugins see <a href="../Text/outputcontainer_py.html">outputcontainer.py</a>, and for validation plugins see <a href="../Text/validationcontainer_py.html">validationcontainer.py</a>.</p>
+
+  <p>There is a <a href="../Text/quickparser_py.html">JSONPrefs class for storing preferences settings</a>. And a simple to use stream-based xml parser provided to users in <a href="../Text/quickparser_py.html">quickparser.py</a>. </p>
+
+  <p>Additional resources for developers include a <a href="../Text/pluginhunspell_py.html">plugin interface to the Hunspell spellchecker</a> and <a href="../Text/sigil_gumbo_bs4_adapter_py.html"> an interface to Google's Gumbo html5 parser via BeautifulSoup4</a>.</p>
+
+  <p>There is also a <a href="../Text/epub_utils_py.html">collection of epub utility routines</a> provided.</p>
+
+  <p></p>
+
+  <h2 id="sigil_toc_id_1">OverView of Routines</h2>
+
+  <h3 id="sigil_toc_id_2">Access routines for the toc.ncx and the page-map.xml</h3>
+
+  <p><code>bk.gettocid()</code></p>
+
+  <ul>
+    <li><p>returns the current manifest id as a unicode string for the toc.ncx Table of Contents</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.getpagemapid()</code></p>
+
+  <ul>
+    <li><p>returns the current manifest id as a unicode string for the page-map.xml (or None)</p></li>
+  </ul>
+
+  <p></p>
+
+  <h3 id="sigil_toc_id_3">Routines to get/set and the spine elements</h3>
+
+  <p><code>bk.getspine()</code></p>
+
+  <ul>
+    <li><p>returns an ordered list of tuples (manifest_id, linear)</p></li>
+
+    <li><p>manifest_id is a unicode string representing a specific file in the manifest</p></li>
+
+    <li><p>linear is either "yes" or "no"</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.setspine(new_spine)</code></p>
+
+  <ul>
+    <li><p>sets the current spine order to new_spine</p></li>
+
+    <li><p>where new_spine is an ordered list of tuples (manifest_id, linear)</p></li>
+
+    <li><p>manifest_id is a unicode string representing a specific file</p></li>
+
+    <li><p>linear is either "yes" or "no"</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.spine_insert_before(position, manifest_id_to_insert, linear, properties=None):</code></p>
+
+  <ul>
+    <li><p>inserts the string manifest_id_to_insert immediately before given position in the spine</p></li>
+
+    <li><p>positions start numbering at 0</p></li>
+
+    <li>position = 0 will prepend to the spine</li>
+
+    <li>position = -1 or position &gt;= spine length will append</li>
+
+    <li><p>linear is either "yes" or "no"</p></li>
+
+    <li><p>properties is None for epub2 but can have page properties for epub3</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.getspine_ppd()</code></p>
+
+  <ul>
+    <li><p>returns a unicode string indicating page-progression direction ("ltr", "rtl", None)</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.setspine_ppd(page-progression-direction)</code></p>
+
+  <ul>
+    <li><p>sets the spine page-progression-direction to the unicode string page-progression-direction</p></li>
+
+    <li><p>allowable values are "ltr", "rtl" or None</p></li>
+  </ul>
+
+  <p></p>
+
+  <h3 id="sigil_toc_id_4">Routines to get and set the guide elements</h3>
+
+  <p><code>bk.getguide()</code></p>
+
+  <ul>
+    <li><p>returns the guide as an ordered list of tuples (type, title, href)</p></li>
+
+    <li><p>where type (unicode string) is the guide type</p></li>
+
+    <li><p>title (unicode string) is the associated guide title</p></li>
+
+    <li><p>href (unicode string) is the associated guide target uri href</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.setguide(new_guide):</code></p>
+
+  <ul>
+    <li><p>sets the guide to be new_guide where new_guide is an ordered list of tuples (type, title, href)</p></li>
+
+    <li><p>type (unicode string) is the guide type</p></li>
+
+    <li><p>title (unicode string) is the associated guide title</p></li>
+
+    <li><p>href (unicode string) is the associated target uri href</p></li>
+  </ul>
+
+  <p></p>
+
+  <h3 id="sigil_toc_id_5">Routines to set and extract the metadata xml</h3>
+
+  <p><code>bk.getmetadataxml()</code></p>
+
+  <ul>
+    <li><p>returns a unicode string of the metadata xml fragment from the OPF</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.setmetadataxml(new_metadata)</code></p>
+
+  <ul>
+    <li><p>sets the OPF metadata xml fragment to be new_metadataxml</p></li>
+
+    <li><p>where new_metadataxml is a unicode string wrapped in its metadata start/end tags</p></li>
+  </ul>
+
+  <p></p>
+
+  <h3 id="sigil_toc_id_6">Routines to set and extract the package tag from the OPF</h3>
+
+  <p><code>bk.getpackagetag()</code></p>
+
+  <ul>
+    <li><p>returns the starting package tag as a unicode string</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.setpackagetag(new_tag)</code></p>
+
+  <ul>
+    <li><p>sets the starting package tag to new_tag which is a unicode string</p></li>
+  </ul>
+
+  <p></p>
+
+  <p></p>
+
+  <h2 id="sigil_toc_id_7">Routines for reading / writing / adding / deleting files in the OPF manifest</h2>
+
+  <p><code>bk.readfile(manifest_id)</code></p>
+
+  <ul>
+    <li><p>returns the contents of the file with the provided manifest_id unicode string as binary data or unicode string as appropriate</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.writefile(manifest_id, data)</code></p>
+
+  <ul>
+    <li><p>writes the unicode text or binary data string to the file pointed to by the provided manifest_id string. If text, the file itself will be utf-8 encoded.</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.addfile(desired_unique_manifest_id, file_basename_with_extension, data, mime=None, properties=None, fallback=None, overlay=None)</code></p>
+
+  <ul>
+    <li><p>creates a new file and gives it the desired_unique_manifest_id string</p></li>
+
+    <li><p>where basename is the desired name of the file with extension (no path added)</p></li>
+
+    <li><p>data is either a string of binary data or a unicode text string</p></li>
+
+    <li><p>if provided the file will be given the media-type provided by the mime-string, and if not provided the file extension is used to set the appropriate media-type</p></li>
+
+    <li><p>to support epub3 manifests, properties, fallback, and media-overlay atributes can also be set.</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.deletefile(manifest_id)</code></p>
+
+  <ul>
+    <li><p>removes the file associated with that manifest id unicode string and removes any existing spine entries as well</p></li>
+  </ul>
+
+  <p></p>
+
+  <p></p>
+
+  <h2 id="sigil_toc_id_8">Routines for reading / writing / adding / deleting other ebook files that do not exist in the OPF manifest</h2>
+
+  <p><code>bk.readotherfile(book_href)</code></p>
+
+  <ul>
+    <li><p>returns the contents of the file pointed to by an href relative to the root directory of the ebook as unicode text or binary bytestring data</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.writeotherfile(book_href, data)</code></p>
+
+  <ul>
+    <li><p>writes data (binary or unicode for text) to a currently existing file pointed to by the ebook href. If text, the file itself will be utf-8 encoded</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.addotherfile(book_href, data)</code></p>
+
+  <ul>
+    <li><p>creates a new file with desired href (relative to the ebook root directory) with the supplied data.</p></li>
+
+    <li><p>the path to the href will be automatically created</p></li>
+
+    <li><p>data is a bytestring that is unicode for text and binary otherwise. If text, the resulting file itself will be utf-8 encoded</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.deleteotherfile(book_href)</code></p>
+
+  <ul>
+    <li><p>deletes the file pointed to by the href (relative to the ebook root directory)</p></li>
+  </ul>
+
+  <p></p>
+
+  <h2 id="sigil_toc_id_9">Iterators</h2>
+
+  <p><code>bk.text_iter():</code></p>
+
+  <ul>
+    <li><p>python iterator over all xhtml/html files: yields the tuple (manifest_id, OPF_href)</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.css_iter():</code></p>
+
+  <ul>
+    <li><p>python iterator over all style sheets (css) files: yields the tuple (manifest_id, OPF_href)</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.image_iter():</code></p>
+
+  <ul>
+    <li><p>python iterator over all image files: yields the tuple (manifest_id, OPF_href, media-type)</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.font_iter():</code></p>
+
+  <ul>
+    <li><p>python iterator over all font files: yields the tuple (manifest_id, OPF_href, media-type)</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.manifest_iter():</code></p>
+
+  <ul>
+    <li><p>python iterator over all files in the OPF manifest: yields the tuple (manifest_id, OPF_href, media-type)</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.spine_iter():</code></p>
+
+  <ul>
+    <li><p>python iterator over all files in the OPF spine in order: yields the tuple (spine_idref, linear, OPF_href)</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.guide_iter():</code></p>
+
+  <ul>
+    <li><p>python iterator over all entries in the OPF guide:</p></li>
+
+    <li><p>yields the tuple (reference_type, title, OPF_href, manifest_id_of_OPF_ href)</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.media_iter():</code></p>
+
+  <ul>
+    <li><p>python iterator over all audio and video files: yields the tuple (manifest_id, OPF_href, media-type)</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.other_iter():</code></p>
+
+  <ul>
+    <li><p>python iterator over all files not in the Manifest: yields href from ebook root directory</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.selected_iter():</code></p>
+
+  <ul>
+    <li><p>python iterator over all files selectd by the user in the BookBrowser before the Plugin was launched:</p></li>
+
+    <li><p>yields the tuple (id_type, id)</p></li>
+  </ul>
+
+  <p></p>
+
+  <h2 id="sigil_toc_id_10">Miscellaneous Routines</h2>
+
+  <p><code>bk.colorMode():</code></p>
+  <ul>
+    <li><p>returns theme "light" or "dark".</p></li>
+  </ul>
+
+  <p><code>bk.color(role):</code></p>
+  <ul>
+    <li><p>returns color as css or javascript hex color string #xxxxxx</p></li>
+    <li><p>accepts the following color roles in a case insensitive manner - "Window", "Base", "Text", "Highlight", "HighlightedText"</p></li>
+  </ul>
+
+  <p><code>bk.getPrefs():</code></p>
+  <ul>
+    <li><p>returns this plugin's preferences storage.(a dictionary object)</p></li>
+  </ul>
+
+  <p><code>bk.savePrefs(user_copy):</code></p>
+  <ul>
+    <li><p>updates this plugin's preferences with a new dictionary object</p></li>
+  </ul>
+
+
+  <p><code>bk.launcher_version():</code></p>
+
+  <ul>
+    <li><p>returns the release date of the launcher code as an integer generated as YYYYMMDD</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.epub_version():</code></p>
+
+  <ul>
+    <li><p>returns as a unicode string the epub version ("2.0" or "3.0") of the current epub as determined by the version attribute value on the OPF package tag</p></li>
+  </ul>
+
+   <p><code>bk.font_bookpath_to_preferred_obfuscation_algorithm(font_bookpath)</code></p>
+   <p>*Newly added in Sigil 2.2.0*</p>
+   <ul>
+    <li><p>when provided a bookpath of a font file, will return the font obfuscation algorithm (or None) set by the user inside Sigil for that font.</p></li>
+  </ul>
+
+
+  <p></p>
+
+  <p><code>bk.get_opf():</code></p>
+
+  <ul>
+    <li><p>returns the current OPF as a unicode string</p></li>
+
+    <li><p>incorporates all of the changes preceding this call</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.copy_book_contents_to(destdir):</code></p>
+
+  <ul>
+    <li><p>copies all ebook contents to the previous destination directory created by the user</p></li>
+  </ul>
+
+  <p><code>bk.plugin_dir():</code></p>
+
+  <ul>
+    <li><p>returns the name of the plugin directory</p></li>
+  </ul>
+
+  <p><code>bk.plugin_name():</code></p>
+
+  <ul>
+    <li><p>returns the name of the plugin</p></li>
+  </ul>
+
+  <p></p>
+
+  <h2 id="sigil_toc_id_11">Convenience Routines to map manifest id to OPF_href, basename, and media-type</h2>
+
+  <p><code>bk.href_to_id(OPF_href, ow=None):</code></p>
+
+  <ul>
+    <li><p>given an OPF href, return the manifest id, if the href does not exist return ow</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.id_to_mime(manifest_id, ow=None):</code></p>
+
+  <ul>
+    <li><p>given a manifest id, return the media-type, if the manifest_id does not exist return ow</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.basename_to_id(basename, ow=None):</code></p>
+
+  <ul>
+    <li><p>given a file's basename (with extension) return its manifest id, otherwise return ow</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.id_to_href(id, ow=None):</code></p>
+
+  <ul>
+    <li><p>given a manifest_id return its OPF href, otherwise return ow</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.href_to_basename(href, ow=None):</code></p>
+
+  <ul>
+    <li><p>given an OPF_href return the basename (with extension) of the file OPF, otherwise return ow</p></li>
+  </ul>
+
+  <h2 id="sigil_toc_id_12">ePub3 Specific Interface Routines</h2>
+
+  <p></p>
+
+  <p><code>bk.getspine_epub3()</code></p>
+
+  <ul>
+    <li><p>return an ordered list of tuples (id, linear, properties)</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.setspine_epub3(new_spine)</code></p>
+
+  <ul>
+    <li><p>set the spine to the ordered list of tuples (id, linear, properties (or None)</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.setspine_idref_epub3_attributes(idref, linear, properties)</code></p>
+
+  <ul>
+    <li><p>set the spine with provided idref with linear and properties values</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.set_manifest_epub3_attributes(id, properties=None, fallback=None, overlay=None)</code></p>
+
+  <ul>
+    <li><p>set the epub3 manifest properties, fallback, and media-overlay attributes for this manifest id</p></li>
+  </ul>
+
+  <h2 id="sigil_toc_id_13">ePub3 Specific Iterators</h2>
+
+  <p></p>
+
+  <p><code>bk.manifest_epub3_iter():</code></p>
+
+  <ul>
+    <li><p>yields manifest id, href, media-type, properties, fallback, media-overlay</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.spine_epub3_iter():</code></p>
+
+  <ul>
+    <li><p>yields spine idref, linear(yes, no, None), properties, and href in spine order</p></li>
+  </ul>
+
+  <p></p>
+
+  <h2 id="sigil_toc_id_14">ePub3 Convenience Mapping Routines</h2>
+
+  <p></p>
+
+  <p><code>bk.id_to_properties(id, ow=None)</code></p>
+
+  <ul>
+    <li><p>maps manifest id to its properties attribute</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.id_to_fallback(id, ow=None)</code></p>
+
+  <ul>
+    <li><p>maps manifest id to its fallback attribute</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>bk.id_to_overlay(id, ow=None)</code></p>
+
+  <ul>
+    <li><p>maps manifest id to its media-overlay attribute</p></li>
+  </ul>
+
+  <p></p>
+
+  <h2 id="sigil_toc_id_15">Routines for better Plugin User Interfaces</h2>
+
+  <p></p>
+
+  <p><code>sigil_ui_lang()</code></p>
+
+  <ul>
+    <li><p>return the current user interface language set in Sigil's Preferences</p></li>
+  </ul>
+
+  <p></p>
+
+  <p><code>sigil_spellcheck_lang()</code></p>
+
+  <ul>
+    <li><p>return the language the users has currently set for Spellchecking in Sigil's Preferences</p></li>
+  </ul>
+
+  <p></p>
+
+<h2>Routines for supporting all epub structures (Sigil 1.0 and later)</h2>
+  <p></p>
+
+<p>A book path (aka "bookpath" aka "book_href" aka "bookhref") is a unique relative path from the ebook root to a specific file.</p>
+
+<p>As a relative path meant to be used in an href or src "link", it only uses forward slashes "/" as path separators.</p>
+    
+<p>Since all files exist inside the epub root (the folder the epub was unzipped into), bookpaths will NEVER have or use "./" or "../" ie they are always in canonical form.</p>
+
+<p>For example under Sigil-0.9.XX all epubs were put into a standard structure.  Under this standard structure book paths would look like the following:</p>
+<ul>                                                                                                    
+   <li>OEBPS/content.opf</li>
+   <li>OEBPS/toc.ncx</li>
+   <li>OEBPS/Text/Section0001.xhtml</li>
+   <li>OEBPS/Images/cover.jpg</li>
+   <li>...</li>
+</ul>
+
+<p>and src and hrefs always looked like the following:</p>
+<ul>                                                               
+  <li><p>from Section0001.xhtml to Section0002.xhtml:</p><p>"../Text/Section0002.xhtml"</p></li>
+  <li><p>from Section0001.xhtml to cover.jpg:</p><p>"../Images/cover.jpg"</p></li>
+  <li><p>from content.opf to Section0001.xhtml:</p><p>"Text/Section0001.xhtml"</p></li>
+  <li><p>from toc.ncx to Section0001.xhtml:</p><p>"Text/Section0001.xhtml</p></li>
+</ul>
+
+<p>Under Sigil 1.0 and later, the original epub structure will be preserved meaning that file names like "content.opf" could be named "package.opf", and be placed almost anyplace inside the epub.  This is true for almost all files.</p>
+
+<p>So to uniquely identify a file, you need to know either the bookpath of the OPF file itself and the manifest href to the specific file, or the path from the epub root to the file (ie. its bookpath)</p>
+      
+
+<p>Therefore the Sigil plugin interface for Sigil 1.0 and later has been extended to allow the plugin developer to more easily work with bookpaths, create links between bookpaths, etc.</p>
+
+<p>We will use the terms book_href (or bookhref) interchangeably with bookpath with the following convention:</p>
+<ul>      
+  <li>use book_href or bookhref when working with "other" files outside the manifest</li>
+  <li>use bookpath when working with files in the opf manifest</li>
+  <li>use either when working with the OPF file as it is at the intersection</li>
+</ul>
+
+<p>&#160;</p>
+
+<p><code>bk.get_opfbookpath()</code></p>
+<ul>
+   <li>returns the bookpath/book_href to the opf file</li>
+</ul>
+
+<p>&#160;</p>
+ 
+<p><code>bk.get_startingdir(bookpath)</code></p>
+<ul>
+  <li>returns the book relative path to the folder containing this bookpath</li>
+</ul>
+
+<p>&#160;</p>
+
+
+<p><code>bk.build_bookpath(href, starting_dir)</code></p>
+<ul>
+   <li> return a bookpath for the file pointed to by the href from the specified bookpath starting directory</li>
+</ul>
+
+<p>&#160;</p>
+ 
+<p><code>bk.get_relativepath(from_bookpath, to_bookpath)</code></p>
+<ul>
+  <li>returns the href relative path from source bookpath to the target bookpath</li>
+</ul>
+
+<p>&#160;</p>
+ 
+<p><code>bk.addbookpath(uniqueid, bookpath, data, mime=None)</code></p>
+<ul>
+   <li> adds a new file to the *manifest* with the stated bookpath and with the provided uniqueid, data, (and media type if specified)</li>
+</ul>
+
+<p>&#160;</p>
+ 
+<p><code>bk.bookpath_to_id(bookpath, ow=None)</code></p>
+<ul>
+   <li> looks up the provided bookpath and returns the corresponding manifest id</li>
+  <li>if the bookpath does not exist in the OPF manifest, ow will be returned</li>
+</ul>
+
+<p>&#160;</p>
+ 
+<p><code>bk.id_to_bookpath(manifest_id, ow=None)</code></p>
+<ul>
+   <li>looks up the provided manifest id and returns the corresponding bookpath of the file</li>
+  <li>if the manifest id does not exist in the OPF manifest, ow will be returned</li>
+</ul>
+
+<p>&#160;</p>
+ 
+<p><code>bk.group_to_folders(group, ow=None)</code></p>
+<ul>
+  <li>returns a sorted list of folders for the specified file type group</li>
+  <li>valid groups: "Text", "Styles", "Images", "Fonts", "Audio", "Video", "ncx", "opf", and "Misc"</li>
+  <li>the first book relative folder path in the list will be the default folder for that file type if more than one location has been used in the epub's layout</li>
+</ul>
+
+<p>&#160;</p>
+ 
+<p><code>bk.mediatype_to_group(mediatype, ow=None)</code></p>
+<ul>
+  <li>lookup the file type group based on a file's media type</li>
+  <li>if the media type is not found, ow is returned</li>
+</ul>
+
+<p>&#160;</p>
+
+<p><code>bk.epub_is_standard()</code></p>
+<ul> 
+  <li>returns true if current epub is in Sigil's previously standard format</li>
+</ul>
+
+<p>&#160;</p>
+
+<h2>Routines new in Sigil 1.9</h2>
+  <p></p>
+
+<p>Sigil 1.8 saw the introduction of the Sigil Automate Lists feature. To make this feature useful, as of Sigil 1.9.0, we have allowed Automate Lists to pass a single line string parameter (value) to a plugin via the new Automate command SetPluginParameter [one line parameter string].</p>
+
+<p>For a plugin to know it is running under an Automate List we have extended the Sigil Plugin interface with a new call:</p>
+
+<p><code>bk.using_automate()</code></p>
+<ul>
+  <li>Returns true if the plugin was launched from withing an Automate List, false otherwise.</li>
+</ul>
+
+<p>&#160;</p>
+
+<p>For a plugin to retrieve the value of any passed parameter from an Automate List, we have added extended the plugin interface with the following:</p>
+
+<p><code>bk.automate_parameter()</code></p>
+<ul>
+  <li>Returns a single line string as set by Automate List or the null string "" if nothing was set.</li>
+</ul>
+
+<p>These new calls are supported by launcher_versions of 20220101 or later.</p>
+
+<p>&#160;</p>
+
+  <p>Examples of these interface functions in use are available in the <a href="../Text/plugin_py.html">tryme</a>_plugin.</p>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>plugin.py</title>
+</head>
+
+<body>
+  <h1>Example "tryme" Edit Plugin</h1>
+
+  <pre>#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# vim:ts=4:sw=4:softtabstop=4:smarttab:expandtab
+
+# target script
+
+from __future__ import unicode_literals, division, absolute_import, print_function
+
+import sys
+
+
+def run(bk):
+    print("Entered Target Script run() routine")
+
+    epubversion = "2.0"
+    if bk.launcher_version() &gt;= 20160102:
+        epubversion = bk.epub_version()
+
+
+    #Examples of how to get preferences, set defaults, and store preferences
+    import os
+    # Get preferences from json file  
+    prefs = bk.getPrefs() # a dictionary
+    # Set some defaults (used only when no preferences exist yet--like first run).
+    prefs.defaults['lastDir'] = os.path.expanduser('~')
+    prefs.defaults['lastFile'] = ''
+    # Use a preference variable
+    print ('Last directory opened = ', prefs['lastDir'])
+    # Set/change preference variable
+    prefs['lastDir'] = os.path.dirname(inpath)
+    # Save prefs back to json file
+    bk.savePrefs(prefs)
+	print("-----")
+
+    lastid = None
+
+    # Examples of using the Iterators
+    
+    # all xhtml/html files
+    for (id, href) in bk.text_iter():
+        print(id, href)
+        lastid = id
+	print("-----")
+
+
+    # all style sheets
+    for (id, href) in bk.css_iter():
+        print(id, href)
+	print("-----")
+
+
+    # all images
+    for (id, href, mime) in bk.image_iter():
+        print(id, href, mime)
+	print("-----")
+
+
+    # all fonts
+    for (id, href, mime) in bk.font_iter():
+        print(id, href, mime)
+	print("-----")
+
+
+    # all files in the OPF manifest
+    for (id, href, mime) in bk.manifest_iter():
+        print(id, href, mime)
+	print("-----")
+
+    
+    # all files in the OPF spine in spine order
+    for (id, linear, href) in bk.spine_iter():
+        print(id, linear, href)
+	print("-----")
+
+
+    # all elements of the OPF guide
+    for (type, title, href, id) in bk.guide_iter():
+        print(type, title, href, id)
+	print("-----")
+
+
+    # all audio and video files
+    for (id, href, mime) in bk.media_iter():
+        print(id, href, mime)
+	print("-----")
+
+
+    # all other ebook files not in the manifest
+    for book_href in bk.other_iter():
+        print(book_href)
+	print("-----")
+
+
+    # all files selected in the BookBrowser by the 
+    # user before the Plugin was launched
+    for (id_type, id) in bk.selected_iter():
+        if id_type == "manifest":
+            href = bk.id_to_href(id, ow=None)
+            mime = bk.id_to_mime(id, ow=None)
+            print(id_type, id, href, mime)
+        else:
+            # not a file in the manifest (other file), href to ebook root as its id
+            print(id_type, id)
+	print("-----")
+
+
+    # all files in the manifest in an epub3
+    print("\nExercising: bk.manifest_epub3_iter()")
+    for (id, href, mtype, props, fall, over) in bk.manifest_epub3_iter():
+        print(id, href, mtype, props, fall, over)
+
+
+    # all files in the spine in an epub3
+    print("\nExercising: bk.spine_epub3_iter()")
+    for (idref, linear, props, href) in bk.spine_epub3_iter():
+        print(idref, linear, props, href)
+
+
+    # Example of reading a non-manifest book file
+    stuff = bk.readotherfile('META-INF/container.xml')
+    print(stuff)
+	print("-----")
+
+    
+    # Example of reading a file with a specific OPF manifest id
+    stuff = bk.readfile(lastid)
+	print("-----")
+
+
+    # Example of writing to a file specified by the manifest id
+    bk.writefile(lastid, stuff)
+	print("-----")
+
+
+    # Example of adding your own file to the manifest
+    print("\nExercising: adding your own file to the manifest")
+
+    data = '&lt;?xml version="1.0" encoding="utf-8"?&gt;\n'
+
+    if epubversion.startswith("3"):
+        data += '&lt;!DOCTYPE html&gt;\n'
+    else:
+        data += '&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" '
+        data += '"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"&gt;\n'
+
+    data += '"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"&gt;\n'
+    data += '&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;\n'
+    data += '&lt;head&gt;\n&lt;title&gt;Hello World&lt;/title&gt;\n&lt;/head&gt;\n'
+    data += '&lt;body&gt;\n'
+    data += '&lt;p&gt;Hello ... I was Created by a Plugin&lt;/p&gt;\n'
+    data += '&lt;/body&gt;\n'
+    data += '&lt;/html&gt;\n'
+    basename = "my_test.html"
+    mt = "application/xhtml+xml"
+    uid1 = 'add1'
+    bk.addfile(uid1, basename, data, mt)
+	print("-----")
+
+    
+    # Examples of Using the Convenience Functions
+    bid = bk.basename_to_id(basename)
+	print("-----")
+
+
+    # Example of creating another file, adding it and then deleting it
+    data = '&lt;html&gt;\n&lt;head&gt;\n&lt;title&gt;Hello2&lt;/title&gt;\n&lt;/head&gt;\n&lt;body&gt;&lt;p&gt;Hello World2&lt;/p&gt;\n&lt;/body&gt;\n&lt;/html&gt;\n'
+    basename = "my_test2.html"
+    uid2 = 'add2'
+    bk.addfile(uid2, basename, data)
+    bk.deletefile(uid2)
+	print("-----")
+ 
+
+	#Example of Using the Hunspell SpellChecker
+    # get a list of all of the locations that Sigil knows about 
+    # where Hunspell dictionaries are installed
+    dic_dirs = bk.get_dictionary_dirs();
+    # check each location to find a pre-installed dictionary in your desired language
+    afffile = None
+    dicfile = None
+    for adir in dic_dirs:
+        afile = os.path.join(adir, "en_US.aff")
+        dfile = os.path.join(adir, "en_US.dic")
+        if os.path.exists(afile) and os.path.exists(dfile):
+            afffile = afile
+            dicfile = dfile
+            break
+    # load the bk.hspell class with the specified dictionary and 
+    # use it to spell-check words and make suggestions if needed
+    if bk.hspell is not None and afffile is not None and dicfile is not None:
+        bk.hspell.loadDictionary(afffile, dicfile)
+        checklist =  ["hello", "goodbye", "don't", "junkj", "misteak"]
+        for word in checklist:
+            res = bk.hspell.check(word)
+            if res != 1:
+                print(word, "incorrect", bk.hspell.suggest(word))
+            else:
+                print(word, "correct")
+        # clean up after yourself so that you can reuse the bk.hspell 
+        # class with a different dictionary    
+        bk.hspell.cleanUp()
+	print("-----")
+
+
+    # Example of using the provided stream based QuickParser to parse metadataxml 
+    # to look for the cover id
+    print(bk.getmetadataxml())
+    ps = bk.qp
+    ps.setContent(bk.getmetadataxml())
+    res = []
+    coverid = None
+    # parse the metadataxml, store away cover_id and rebuild it
+    for text, tagprefix, tagname, tagtype, tagattr in ps.parse_iter():
+        # print tagprefix, tagname, tagtype, tagattr
+        if text is not None:
+            # print(text)
+            res.append(text)
+        else:
+            # print(tagprefix, tagname, tagtype, tagattr)
+            if tagname == "meta" and tagattr.get("name",'') == "cover":
+                coverid = tagattr["content"]
+            res.append(ps.tag_info_to_xml(tagname, tagtype, tagattr))
+    print("".join(res))
+	print("-----")
+
+
+    # examples for using the bs4/gumbo parser to process xhtml
+    import sigil_bs4
+    import sigil_gumbo_bs4_adapter as gumbo_bs4
+
+    samp = """
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml/" xml:lang="en" lang="en-US"&gt;
+&lt;head&gt;&lt;title&gt;testing &amp; entities&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;p class="first second"&gt;this is the &lt;i&gt;&lt;b&gt;copyright&lt;/i&gt;&lt;/b&gt; symbol "©"&lt;/p&gt;
+  &lt;p xmlns:xlink="http://www.w3.org/xlink" class="second" xlink:href="http://www.google.com"&gt;this used to test atribute namespaces&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+"""
+
+    soup = gumbo_bs4.parse(samp)
+    for node in soup.find_all(attrs={'class':'second'}):
+        print(node)
+    print(soup.serialize_xhtml());
+    print(soup.prettyprint_xhtml(indent_level=0, eventual_encoding="utf-8", formatter="minimal", indent_chars="  "))
+	print("-----")
+    
+
+    # More Examples of using the convenience mapping functions
+    print("coverid is: ", coverid, bk.id_to_href(coverid), bk.id_to_mime(coverid))
+	print("-----")
+
+    # Example of copying entire book to your own new directory
+    # bk.copy_book_contents_to("/Users/kbhend/Desktop/book_copy")
+ 	# print("-----")
+   
+ 
+    # Setting the proper Return value is important.
+    # 0 - means success
+    # anything else means failure
+    return 0
+ 
+  
+def main():
+    print("I reached main when I should not have")
+    return -1
+    
+if __name__ == "__main__":
+    sys.exit(main())
+
+</pre>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Anatomy of a Plugin</title>
+  <style type="text/css">    li.sgc-1 {list-style: none; display: inline}
+  </style>
+</head>
+
+<body>
+  <h1>The Anatomy of a Plugin</h1>
+
+  <p>A Sigil plugin is simply a zip archive that follows specific rules for naming and structure that contains Python 3.4 or later code to add or extend Sigil's capabilities.  These rules are as follows:</p>
+
+  <ul>
+    <li><p>The zip file name must start with the plugin name optionally followed by an underscore "_" and then any version information the author desires. All plugin names MUST be unique and be reasonably short in length. Theses names will be used to build Sigil's Plugins menu, therefore they should also be somewhat informative and should follow common sense as when making any file name (ie. do not include any special characters that would need to be uri/url encoded, etc).</p></li>
+
+    <li><p>Each plugin must unpack into its own directory with the exact same name as the plugin itself after removing the optional underscore and version information from the zip file name.</p></li>
+
+    <li><p>The name of the file that contains the initial run() function must be "plugin.py" and must reside at the root level of the plugin's directory.</p></li>
+
+    <li><p>An optional "plugin.png" or "plugin.svg" image file may be added to supply an icon for your plugin when added to Sigil's Toolbar.</p></li>
+
+    <li><p>You may have as many other files or subdirectories as you want as long as they are inside the plugin's directory.</p></li>
+
+    <li><p>At the root level of the plugin directory, there must also exist a file named "plugin.xml" that is utf-8 encoded that provides the following tag specific information (see the example xml file below for the specific formatting).</p></li>
+
+    <li class="sgc-1"><ul>
+      <li><p>name of the plugin</p></li>
+
+      <li><p>the plugin's type, allowed types are "input", "output", "edit", and "validation"</p></li>
+
+      <li><p>author's name</p></li>
+
+      <li><p>a short descriptive phrase</p></li>
+
+      <li><p>the interpreter "engine" required by the plugin. Currently this is limited to "python3.4" which represents the minimum version requirements for the python interpreter.</p></li>
+
+      <li><p>any version information for the the plugin.</p></li>
+
+      <li><p>if the plugin should automatically start (true or false)</p></li>
+
+      <li><p>if the plugin should automatically close if completes with no errors (true or false)</p></li>
+
+      <li><p>a comma separated list of the operating systems currently supported by this plugin. Allowed values are "unx" for Unix/Linux, "win" for Windows, and "osx" for Mac OS X.</p></li></ul>
+  
+  <p>Sigil supports Python 3.4 or later plugins. Support for Python 2.7 based plugins was removed in Sigil 0.9.7.</p></li>
+
+</ul>
+
+  <p>Here is an example of the plugin.xml file for a sample plugin:</p>
+
+  <pre><code>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;plugin&gt; 
+&lt;name&gt;SamplePlugin&lt;/name&gt;
+&lt;type&gt;edit&lt;/type&gt;
+&lt;author&gt;Your Name Here&lt;/author&gt;
+&lt;description&gt;Sample plugin&lt;/description&gt;
+&lt;engine&gt;python3.4&lt;/engine&gt;
+&lt;version&gt;0.1.0&lt;/version&gt;
+&lt;autostart&gt;true&lt;/autostart&gt;
+&lt;autoclose&gt;true&lt;/autoclose&gt;
+&lt;oslist&gt;osx,unx,win&lt;/oslist&gt;
+&lt;/plugin&gt; 
+  </code></pre>
+
+  <p>This information is used to register your plugin with Sigil via the Preferences -&gt; Plugins dialog.</p>
+
+  <div>
+    <img alt="" src="../Images/Manage_Plugins.png"/>
+  </div>
+
+  <p></p>
+
+  <p>The plugin's plugin.py program must have a run() routine that accepts a container object as its sole parameter. There are four different container objects, one to match each of the four plugin types:
+edit - BookContainer, input - InputContainer, output - OutputContainer, and validation - ValidationContainer.  The following chapters in this guide are devoted to the access/support routines (API) provided by each type of the container object. Here <em>bk</em> is an instance of the <a href="../Text/sigil_python_plugins.html">BookContainer class</a> used for "edit" plugin types:</p>
+
+  <pre><code> 
+#!/usr/bin/env python 
+# -*- coding: utf-8 -*- 
+import sys
+def run(bk): 
+    print "Entered Target Script run() routine"
+    # Setting the proper Return value is important. 
+	# 0 - means success 
+	# anything else means failure 
+    return 0
+
+def main(): 
+    print("I reached main when I should not have\n")
+    return -1
+
+if __name__ == "__main__":
+    sys.exit(main())
+  </code></pre>
+
+  <p></p>
+
+  <p>Once you have included all your other plugin files and scripts you just zip up your plugin directory and add any desired version information to the zip file name after an underscore to create your plugin zip archive. To help make this clearer, a simple listing of the files and structure of testme.zip is provided below.</p>
+
+  <p></p>
+
+  <pre><code> 
+kbhend$ unzip -t testme_v0.1.0beta.zip 
+Archive: testme_v0.1.0beta.zip 
+testing: testme/ OK 
+testing: testme/plugin.xml OK 
+testing: testme/plugin.py OK 
+No errors detected in compressed data of testme_v0.1.0beta.zip.
+  </code></pre>
+
+  <p></p>
+
+  <p>Your plugin is launched by selecting its name from the Main Window's "Plugins" menu. Once launched, the user can start or cancel the plugin, see if it succeeded or failed, and see any output message your plugin has written to standard out and/or standard error.</p>
+
+  <p></p>
+
+  <div>
+    <img alt="" src="../Images/PluginRunner.jpg"/>
+  </div>
+
+  <p></p>
+
+  <p>Upon success, the resulting changed files will be copied into Sigil and made official. Upon failure or cancellation, nothing inside Sigil is changed.</p>
+</body>
+</html>

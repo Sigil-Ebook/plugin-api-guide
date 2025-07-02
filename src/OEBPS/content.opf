@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package version="2.0" unique-identifier="BookId" xmlns="http://www.idpf.org/2007/opf">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+    <dc:identifier id="BookId" opf:scheme="UUID">urn:uuid:de4ef1ad-aef5-4d2e-b59b-ee93ed35410e</dc:identifier>
+    <dc:title>Sigil Plugin Framework</dc:title>
+    <dc:creator opf:file-as="Hendricks, Kevin B." opf:role="aut">Kevin B. Hendricks</dc:creator>
+    <dc:language>en</dc:language>
+    <dc:date opf:event="modification">2025-05-30</dc:date>
+    <meta content="2.5.0" name="Sigil version"/>
+  </metadata>
+  <manifest>
+    <item id="coverpage" href="Text/cover.html" media-type="application/xhtml+xml"/>
+    <item id="anbk" href="Text/bookcontainer_py.html" media-type="application/xhtml+xml"/>
+    <item id="anik" href="Text/inputcontainer_py.html" media-type="application/xhtml+xml"/>
+    <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
+    <item id="anok" href="Text/outputcontainer_py.html" media-type="application/xhtml+xml"/>
+    <item id="anvk" href="Text/validationcontainer_py.html" media-type="application/xhtml+xml"/>
+    <item id="quickparser_py.html" href="Text/quickparser_py.html" media-type="application/xhtml+xml"/>
+    <item id="an01" href="Text/sigil_plugin_anatomy.html" media-type="application/xhtml+xml"/>
+    <item id="an02" href="Text/sigil_python_plugins.html" media-type="application/xhtml+xml"/>
+    <item id="im02" href="Images/PluginRunner.jpg" media-type="image/jpeg"/>
+    <item id="plugin_py.html" href="Text/plugin_py.html" media-type="application/xhtml+xml"/>
+    <item id="Sigil_Plugins_Menu.jpg" href="Images/Sigil_Plugins_Menu.jpg" media-type="image/jpeg"/>
+    <item id="pluginhunspell_py.html" href="Text/pluginhunspell_py.html" media-type="application/xhtml+xml"/>
+    <item id="sigil_gumbo_bs4_adapter_py.html" href="Text/sigil_gumbo_bs4_adapter_py.html" media-type="application/xhtml+xml"/>
+    <item id="epub_utils_py.html" href="Text/epub_utils_py.html" media-type="application/xhtml+xml"/>
+    <item id="preferences_py.html" href="Text/preferences_py.html" media-type="application/xhtml+xml"/>
+    <item id="Manage_Plugins.png" href="Images/Manage_Plugins.png" media-type="image/png"/>
+  </manifest>
+  <spine toc="ncx">
+    <itemref idref="coverpage"/>
+    <itemref idref="an01"/>
+    <itemref idref="an02"/>
+    <itemref idref="plugin_py.html"/>
+    <itemref idref="anbk"/>
+    <itemref idref="anik"/>
+    <itemref idref="anok"/>
+    <itemref idref="anvk"/>
+    <itemref idref="quickparser_py.html"/>
+    <itemref idref="preferences_py.html"/>
+    <itemref idref="pluginhunspell_py.html"/>
+    <itemref idref="sigil_gumbo_bs4_adapter_py.html"/>
+    <itemref idref="epub_utils_py.html"/>
+  </spine>
+</package>
