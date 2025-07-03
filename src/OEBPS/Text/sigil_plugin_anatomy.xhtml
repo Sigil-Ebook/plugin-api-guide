@@ -43,7 +43,8 @@
 
       <li><p>if the plugin should automatically close if completes with no errors (true or false)</p></li>
 
-      <li><p>a comma separated list of the operating systems currently supported by this plugin. Allowed values are "unx" for Unix/Linux, "win" for Windows, and "osx" for Mac OS X.</p></li></ul>
+      <li><p>a comma separated list of the operating systems currently supported by this plugin. Allowed values are "unx" for Unix/Linux, "win" for Windows, and "osx" for Mac OS X.</p></li>
+</ul>
   
   <p>Sigil supports Python 3.4 or later plugins. Support for Python 2.7 based plugins was removed in Sigil 0.9.7.</p></li>
 
@@ -75,7 +76,7 @@
   <p></p>
 
   <p>The plugin's plugin.py program must have a run() routine that accepts a container object as its sole parameter. There are four different container objects, one to match each of the four plugin types:
-edit - BookContainer, input - InputContainer, output - OutputContainer, and validation - ValidationContainer.  The following chapters in this guide are devoted to the access/support routines (API) provided by each type of the container object. Here <em>bk</em> is an instance of the <a href="../Text/sigil_python_plugins.html">BookContainer class</a> used for "edit" plugin types:</p>
+edit - BookContainer, input - InputContainer, output - OutputContainer, and validation - ValidationContainer.  The following chapters in this guide are devoted to the access/support routines (API) provided by each type of the container object. Here <em>bk</em> is an instance of the <a href="sigil_python_plugins.xhtml">BookContainer class</a> used for "edit" plugin types:</p>
 
   <pre><code> 
 #!/usr/bin/env python 

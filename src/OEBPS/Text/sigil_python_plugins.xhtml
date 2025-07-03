@@ -9,7 +9,7 @@
 <body>
   <h1>The Plugin Interface: See file: bookcontainer.py</h1>
 
-  <p>Each plugin is passed an instance of a container class that maps to the type of plugin.  For "edit" plugins this container class is called <b>BookContainer</b> and is represented by the (bk) in the single parameter to their run() function. The BookContainer class effectively implements the Python 3.4 edit plugin interface for Sigil. All of the plugin interface code has been written to run on python 3.4 or later systems. For more information, see <a href="../Text/sigil_plugin_anatomy.html">the Anatomy of a Plugin</a> . The BookContainer class contains a number of interface routines, utilities, and iterators to allow you safe access to the ePub ebook internals currently being edited by Sigil (in the current active window).</p>
+  <p>Each plugin is passed an instance of a container class that maps to the type of plugin.  For "edit" plugins this container class is called <b>BookContainer</b> and is represented by the (bk) in the single parameter to their run() function. The BookContainer class effectively implements the Python 3.4 edit plugin interface for Sigil. All of the plugin interface code has been written to run on python 3.4 or later systems. For more information, see <a href="sigil_plugin_anatomy.xhtml">the Anatomy of a Plugin</a> . The BookContainer class contains a number of interface routines, utilities, and iterators to allow you safe access to the ePub ebook internals currently being edited by Sigil (in the current active window).</p>
 
   <p>The primary idea behind the BookContainer interface is that it will parse the OPF file for you behind the scenes and make available files via their manifest ids. As users add and remove files, change metadata, etc, the underlying OPF file is automatically updated to reflect those changes. If your code requires you to parse the OPF file yourself, the currently updated OPF file contents can be generated and returned as a data string.</p>
 
@@ -66,13 +66,13 @@ class BookContainer(object):
 
   <p>The actual up-to-date container source code can be found in the <a href="https://github.com/Sigil-Ebook/Sigil/tree/master/src/Resource_Files/plugin_launchers/python">Sigil github tree in src/Sigil/Resource_Files/plugin_launchers/python.</a> </p>
 
-  <p>For "edit" plugins see <a href="../Text/bookcontainer_py.html">bookcontainer.py</a> , for input plugins see <a href="../Text/inputcontainer_py.html">inputcontainer.py</a>, for output plugins see <a href="../Text/outputcontainer_py.html">outputcontainer.py</a>, and for validation plugins see <a href="../Text/validationcontainer_py.html">validationcontainer.py</a>.</p>
+  <p>For "edit" plugins see <a href="bookcontainer_py.xhtml">bookcontainer.py</a> , for input plugins see <a href="inputcontainer_py.xhtml">inputcontainer.py</a>, for output plugins see <a href="outputcontainer_py.xhtml">outputcontainer.py</a>, and for validation plugins see <a href="validationcontainer_py.xhtml">validationcontainer.py</a>.</p>
 
-  <p>There is a <a href="../Text/quickparser_py.html">JSONPrefs class for storing preferences settings</a>. And a simple to use stream-based xml parser provided to users in <a href="../Text/quickparser_py.html">quickparser.py</a>. </p>
+  <p>There is a <a href="quickparser_py.xhtml">JSONPrefs class for storing preferences settings</a>. And a simple to use stream-based xml parser provided to users in <a href="quickparser_py.xhtml">quickparser.py</a>. </p>
 
-  <p>Additional resources for developers include a <a href="../Text/pluginhunspell_py.html">plugin interface to the Hunspell spellchecker</a> and <a href="../Text/sigil_gumbo_bs4_adapter_py.html"> an interface to Google's Gumbo html5 parser via BeautifulSoup4</a>.</p>
+  <p>Additional resources for developers include a <a href="pluginhunspell_py.xhtml">plugin interface to the Hunspell spellchecker</a> and <a href="sigil_gumbo_bs4_adapter_py.xhtml"> an interface to Google's Gumbo html5 parser via BeautifulSoup4</a>.</p>
 
-  <p>There is also a <a href="../Text/epub_utils_py.html">collection of epub utility routines</a> provided.</p>
+  <p>There is also a <a href="epub_utils_py.xhtml">collection of epub utility routines</a> provided.</p>
 
   <p></p>
 
@@ -617,7 +617,7 @@ class BookContainer(object):
 
   <p></p>
 
-<h2 id="sigil_toc_id_16">Routines for supporting all epub structures (Sigil 1.0 and later)</h2>
+<h2>Routines for supporting all epub structures (Sigil 1.0 and later)</h2>
   <p></p>
 
 <p>A book path (aka "bookpath" aka "book_href" aka "bookhref") is a unique relative path from the ebook root to a specific file.</p>
@@ -735,7 +735,7 @@ class BookContainer(object):
 
 <p>&#160;</p>
 
-<h2 id="sigil_toc_id_17">Routines new in Sigil 1.9</h2>
+<h2>Routines new in Sigil 1.9</h2>
   <p></p>
 
 <p>Sigil 1.8 saw the introduction of the Sigil Automate Lists feature. To make this feature useful, as of Sigil 1.9.0, we have allowed Automate Lists to pass a single line string parameter (value) to a plugin via the new Automate command SetPluginParameter [one line parameter string].</p>
@@ -760,6 +760,6 @@ class BookContainer(object):
 
 <p>&#160;</p>
 
-  <p>Examples of these interface functions in use are available in the <a href="../Text/plugin_py.html">tryme</a>_plugin.</p>
+  <p>Examples of these interface functions in use are available in the <a href="plugin_py.xhtml">tryme</a>_plugin.</p>
 </body>
 </html>

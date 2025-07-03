@@ -38,7 +38,7 @@ def run(bk):
     # Use a preference variable
     print ('Last directory opened = ', prefs['lastDir'])
     # Set/change preference variable
-    prefs['lastDir'] = os.path.dirname(inpath)
+    prefs['lastDir'] = os.path.dirname(os.path.expanduser('~'))
     # Save prefs back to json file
     bk.savePrefs(prefs)
 	print("-----")
@@ -154,7 +154,6 @@ def run(bk):
         data += '&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" '
         data += '"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"&gt;\n'
 
-    data += '"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"&gt;\n'
     data += '&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;\n'
     data += '&lt;head&gt;\n&lt;title&gt;Hello World&lt;/title&gt;\n&lt;/head&gt;\n'
     data += '&lt;body&gt;\n'

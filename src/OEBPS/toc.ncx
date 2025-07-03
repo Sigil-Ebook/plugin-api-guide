@@ -14,187 +14,163 @@
     <navLabel>
       <text>Sigil Support for Plugins</text>
     </navLabel>
-    <content src="Text/cover.html" />
+    <content src="Text/cover.xhtml" />
   </navPoint>
   <navPoint id="navPoint2">
     <navLabel>
       <text>The Anatomy of a Plugin</text>
     </navLabel>
-    <content src="Text/sigil_plugin_anatomy.html" />
+    <content src="Text/sigil_plugin_anatomy.xhtml" />
   </navPoint>
   <navPoint id="navPoint3">
     <navLabel>
-      <text>The Plugin Interface: See file: bookcontainer.py</text>
+      <text>The Edit Plugin Inteface: bookcontainer.py</text>
     </navLabel>
-    <content src="Text/sigil_python_plugins.html" />
+    <content src="Text/sigil_python_plugins.xhtml" />
     <navPoint id="navPoint4">
       <navLabel>
-        <text>OverView of Routines</text>
+        <text>Routines to Access and Manipulate OPF elements</text>
       </navLabel>
-      <content src="Text/sigil_python_plugins.html#sigil_toc_id_1" />
+      <content src="Text/sigil_python_plugins.xhtml#sigil_toc_id_1" />
       <navPoint id="navPoint5">
         <navLabel>
           <text>Access routines for the toc.ncx and the page-map.xml</text>
         </navLabel>
-        <content src="Text/sigil_python_plugins.html#sigil_toc_id_2" />
+        <content src="Text/sigil_python_plugins.xhtml#sigil_toc_id_2" />
       </navPoint>
       <navPoint id="navPoint6">
         <navLabel>
           <text>Routines to get/set and the spine elements</text>
         </navLabel>
-        <content src="Text/sigil_python_plugins.html#sigil_toc_id_3" />
+        <content src="Text/sigil_python_plugins.xhtml#sigil_toc_id_3" />
       </navPoint>
       <navPoint id="navPoint7">
         <navLabel>
           <text>Routines to get and set the guide elements</text>
         </navLabel>
-        <content src="Text/sigil_python_plugins.html#sigil_toc_id_4" />
+        <content src="Text/sigil_python_plugins.xhtml#sigil_toc_id_4" />
       </navPoint>
       <navPoint id="navPoint8">
         <navLabel>
           <text>Routines to set and extract the metadata xml</text>
         </navLabel>
-        <content src="Text/sigil_python_plugins.html#sigil_toc_id_5" />
+        <content src="Text/sigil_python_plugins.xhtml#sigil_toc_id_5" />
       </navPoint>
       <navPoint id="navPoint9">
         <navLabel>
           <text>Routines to set and extract the package tag from the OPF</text>
         </navLabel>
-        <content src="Text/sigil_python_plugins.html#sigil_toc_id_6" />
+        <content src="Text/sigil_python_plugins.xhtml#sigil_toc_id_6" />
       </navPoint>
     </navPoint>
     <navPoint id="navPoint10">
       <navLabel>
         <text>Routines for reading / writing / adding / deleting files in the OPF manifest</text>
       </navLabel>
-      <content src="Text/sigil_python_plugins.html#sigil_toc_id_7" />
+      <content src="Text/sigil_python_plugins.xhtml#sigil_toc_id_7" />
     </navPoint>
     <navPoint id="navPoint11">
       <navLabel>
         <text>Routines for reading / writing / adding / deleting other ebook files that do not exist in the OPF manifest</text>
       </navLabel>
-      <content src="Text/sigil_python_plugins.html#sigil_toc_id_8" />
+      <content src="Text/sigil_python_plugins.xhtml#sigil_toc_id_8" />
     </navPoint>
     <navPoint id="navPoint12">
       <navLabel>
         <text>Iterators</text>
       </navLabel>
-      <content src="Text/sigil_python_plugins.html#sigil_toc_id_9" />
+      <content src="Text/sigil_python_plugins.xhtml#sigil_toc_id_9" />
     </navPoint>
     <navPoint id="navPoint13">
       <navLabel>
         <text>Miscellaneous Routines</text>
       </navLabel>
-      <content src="Text/sigil_python_plugins.html#sigil_toc_id_10" />
+      <content src="Text/sigil_python_plugins.xhtml#sigil_toc_id_10" />
     </navPoint>
     <navPoint id="navPoint14">
       <navLabel>
         <text>Convenience Routines to map manifest id to OPF_href, basename, and media-type</text>
       </navLabel>
-      <content src="Text/sigil_python_plugins.html#sigil_toc_id_11" />
+      <content src="Text/sigil_python_plugins.xhtml#sigil_toc_id_11" />
     </navPoint>
     <navPoint id="navPoint15">
       <navLabel>
-        <text>ePub3 Specific Interface Routines</text>
+        <text>New ePub3 Interface Routines</text>
       </navLabel>
-      <content src="Text/sigil_python_plugins.html#sigil_toc_id_12" />
+      <content src="Text/sigil_python_plugins.xhtml#sigil_toc_id_12" />
     </navPoint>
     <navPoint id="navPoint16">
       <navLabel>
-        <text>ePub3 Specific Iterators</text>
+        <text>New ePub3 Iterators</text>
       </navLabel>
-      <content src="Text/sigil_python_plugins.html#sigil_toc_id_13" />
+      <content src="Text/sigil_python_plugins.xhtml#sigil_toc_id_13" />
     </navPoint>
     <navPoint id="navPoint17">
       <navLabel>
-        <text>ePub3 Convenience Mapping Routines</text>
+        <text>New ePub3 Convenience Mapping Routines</text>
       </navLabel>
-      <content src="Text/sigil_python_plugins.html#sigil_toc_id_14" />
-    </navPoint>
-    <navPoint id="navPoint18">
-      <navLabel>
-        <text>Routines for better Plugin User Interfaces</text>
-      </navLabel>
-      <content src="Text/sigil_python_plugins.html#sigil_toc_id_15" />
-    </navPoint>
-    <navPoint id="navPoint19">
-      <navLabel>
-        <text>Routines for supporting all epub structures (Sigil 1.0 and later)</text>
-      </navLabel>
-      <content src="Text/sigil_python_plugins.html#sigil_toc_id_16" />
-    </navPoint>
-    <navPoint id="navPoint20">
-      <navLabel>
-        <text>Routines new in Sigil 1.9</text>
-      </navLabel>
-      <content src="Text/sigil_python_plugins.html#sigil_toc_id_17" />
+      <content src="Text/sigil_python_plugins.xhtml#sigil_toc_id_14" />
     </navPoint>
   </navPoint>
-  <navPoint id="navPoint21">
+  <navPoint id="navPoint18">
     <navLabel>
       <text>Example "tryme" Edit Plugin</text>
     </navLabel>
-    <content src="Text/plugin_py.html" />
+    <content src="Text/plugin_py.xhtml" />
   </navPoint>
-  <navPoint id="navPoint22">
+  <navPoint id="navPoint19">
     <navLabel>
       <text>The BookContainer Class</text>
     </navLabel>
-    <content src="Text/bookcontainer_py.html" />
+    <content src="Text/bookcontainer_py.xhtml" />
   </navPoint>
-  <navPoint id="navPoint23">
+  <navPoint id="navPoint20">
     <navLabel>
-      <text>The InputContainer Class</text>
+      <text>The InputContainerClass</text>
     </navLabel>
-    <content src="Text/inputcontainer_py.html" />
+    <content src="Text/inputcontainer_py.xhtml" />
   </navPoint>
-  <navPoint id="navPoint24">
+  <navPoint id="navPoint21">
     <navLabel>
       <text>The OutputContainer Class</text>
     </navLabel>
-    <content src="Text/outputcontainer_py.html" />
+    <content src="Text/outputcontainer_py.xhtml" />
   </navPoint>
-  <navPoint id="navPoint25">
+  <navPoint id="navPoint22">
     <navLabel>
       <text>The Validation Container Class</text>
     </navLabel>
-    <content src="Text/validationcontainer_py.html" />
-    <navPoint id="navPoint26">
-      <navLabel>
-        <text>The Validation Result Class</text>
-      </navLabel>
-      <content src="Text/validationcontainer_py.html#sigil_toc_id_18" />
-    </navPoint>
+    <content src="Text/validationcontainer_py.xhtml" />
   </navPoint>
-  <navPoint id="navPoint27">
+  <navPoint id="navPoint23">
     <navLabel>
       <text>The QuickXHTMLParser Class</text>
     </navLabel>
-    <content src="Text/quickparser_py.html" />
+    <content src="Text/quickparser_py.xhtml" />
   </navPoint>
-  <navPoint id="navPoint28">
+  <navPoint id="navPoint24">
     <navLabel>
       <text>The JSONPrefs Class</text>
     </navLabel>
-    <content src="Text/preferences_py.html" />
+    <content src="Text/preferences_py.xhtml" />
   </navPoint>
-  <navPoint id="navPoint29">
+  <navPoint id="navPoint25">
     <navLabel>
       <text>The HunspellChecker Class</text>
     </navLabel>
-    <content src="Text/pluginhunspell_py.html" />
+    <content src="Text/pluginhunspell_py.xhtml" />
   </navPoint>
-  <navPoint id="navPoint30">
+  <navPoint id="navPoint26">
     <navLabel>
       <text>Adapter to Use BeautifulSoup4 to interface with Google's Gumbo HTML5 Parser</text>
     </navLabel>
-    <content src="Text/sigil_gumbo_bs4_adapter_py.html" />
+    <content src="Text/sigil_gumbo_bs4_adapter_py.xhtml" />
   </navPoint>
-  <navPoint id="navPoint31">
+  <navPoint id="navPoint27">
     <navLabel>
       <text>Collection of utility routines for working with epubs</text>
     </navLabel>
-    <content src="Text/epub_utils_py.html" />
+    <content src="Text/epub_utils_py.xhtml" />
   </navPoint>
 </navMap>
 </ncx>
