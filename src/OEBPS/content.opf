@@ -7,7 +7,7 @@
     <meta refines="#create1" property="file-as">Hendricks, Kevin B.</meta>
     <meta refines="#create1" property="role" scheme="marc:relators">aut</meta>
     <dc:language>en</dc:language>
-    <meta property="dcterms:modified">2025-07-03T10:11:17Z</meta>
+    <meta property="dcterms:modified">2025-07-03T12:58:46Z</meta>
     <dc:identifier id="BookId">urn:uuid:de4ef1ad-aef5-4d2e-b59b-ee93ed35410e</dc:identifier>
     <meta content="2.5.2" name="Sigil version"/>
   </metadata>
@@ -30,6 +30,7 @@
     <item id="preferences_py.html" href="Text/preferences_py.xhtml" media-type="application/xhtml+xml"/>
     <item id="Manage_Plugins.png" href="Images/Manage_Plugins.png" media-type="image/png"/>
     <item id="navid" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/>
+    <item id="Style0001.css" href="Styles/Style0001.css" media-type="text/css"/>
   </manifest>
   <spine toc="ncx">
     <itemref idref="coverpage"/>
