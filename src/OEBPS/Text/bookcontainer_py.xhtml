@@ -83,7 +83,7 @@ class BookContainer(object):
             return 'en_US'
         return self._w.sigil_spellcheck_lang
 
-# OPF Acess and Manipulation Routines
+# OPF Access and Manipulation Routines
 
 # toc and pagemap access routines
 
@@ -163,17 +163,17 @@ class BookContainer(object):
 # metadata get/set
 
     def getmetadataxml(self):
-        # returns a utf-8 encoded metadata xml fragement
+        # returns a utf-8 encoded metadata xml fragment
         return self._w.getmetadataxml()
 
     def setmetadataxml(self, new_metadata):
-        # new_metadata must be a metadata xml fragmment
+        # new_metadata must be a metadata xml fragment
         self._w.setmetadataxml(new_metadata)
 
 # package tag get/set
 
     def getpackagetag(self):
-        # returns a utf-8 encoded metadata xml fragement
+        # returns a utf-8 encoded metadata xml fragment
         return self._w.getpackagetag()
 
     def setpackagetag(self, new_tag):
@@ -202,7 +202,7 @@ class BookContainer(object):
 
     # New for epub3
     def set_manifest_epub3_attributes(self, id, properties=None, fallback=None, overlay=None):
-        # sets the epub3 manifest attrobutes for this manifest id
+        # sets the epub3 manifest attributes for this manifest id
         self._w.set_manifest_epub3_attributes(id, properties, fallback, overlay)
 
 # reading / writing / adding / deleting other ebook files that DO NOT exist in the opf manifest
@@ -400,7 +400,7 @@ class BookContainer(object):
         return self._w.colorMode()
 
     # returns color as css or javascript hex color string #xxxxxx
-    # acccepts the following color roles in a case insensitive manner:
+    # accepts the following color roles in a case insensitive manner:
     #    "Window", "Base", "Text", "Highlight", "HighlightedText"
     def color(self, role):
         return self._w.color(role)
